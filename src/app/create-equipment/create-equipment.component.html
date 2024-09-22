@@ -10,7 +10,7 @@
 
       <div>
         <label for="type">Type:</label>
-        <select id="type" formControlName="type" required>
+        <select (change)="showWorn($event)" id="type" formControlName="type" required>
           <option value="Weapon">Weapon</option>
           <option value="Armor">Armor</option>
           <option value="Accessory">Accessory</option>
@@ -23,6 +23,25 @@
         <select id="handedness" formControlName="handedness">
           <option value="1">One-Handed</option>
           <option value="2">Two-Handed</option>
+        </select>
+      </div>
+
+      <div *ngIf="showWornSlot">
+        <label for="wornSlot">Worn Slot:</label>
+        <select id="wornSlot" formControlName="wornSlot">
+          <option value="head">Head</option>
+          <option value="neck">Neck</option>
+          <option value="chest">Chest</option>
+          <option value="wrists">Wrists</option>
+          <option value="belt">Belt</option>
+          <option value="legs">Legs</option>
+          <option value="feet">Feet</option>
+          <option value="hands">Hands</option>
+          <option value="ring1">Ring1</option>
+          <option value="ring2">Ring2</option>
+          <option value="weapon">Weapon</option>
+          <option value="offhand">Offhand</option>
+          <option value="unique_slot">Unique Slot</option>
         </select>
       </div>
 

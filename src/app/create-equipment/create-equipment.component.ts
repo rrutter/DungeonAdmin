@@ -12,9 +12,10 @@ import { Router } from '@angular/router';
 export class CreateEquipmentComponent implements OnInit {
   equipmentForm: FormGroup;
   guilds: any[] = [];
-  allEquipment: any[] = []; // Holds all equipment data from the backend
-  filteredEquipment: any[] = []; // Holds filtered equipment based on type
-  filterType: string = ''; // For filtering equipment by type
+  allEquipment: any[] = [];
+  filteredEquipment: any[] = [];
+  filterType: string = '';
+  showWornSlot: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,12 +44,13 @@ export class CreateEquipmentComponent implements OnInit {
       intelligenceBonus: [0],
       wisdomBonus: [0],
       charismaBonus: [0],
-      alignment: ['Neutral', Validators.required],
+      alignment: ['Neutral', Validators.required], // Default to Neutral
       value: [0, [Validators.min(0)]],
       isCursed: [false],
       special: [''],
       special2: [''],
       iconUrl: [''],
+      wornSlot: [''],
       guilds: this.fb.array([])
     });
   }
@@ -136,7 +138,10 @@ export class CreateEquipmentComponent implements OnInit {
       special: equipment.special,
       special2: equipment.special2,
       iconUrl: equipment.iconUrl,
+      wornSlot: equipment.wornSlot
     });
+
+    this.checkTypeAndToggleWornSlot(equipment.type);
 
     // Clear the existing form array for guilds
     const guildArray = this.equipmentForm.get('guilds') as FormArray;
@@ -151,6 +156,24 @@ export class CreateEquipmentComponent implements OnInit {
         })
       );
     });
+  }
+
+  checkTypeAndToggleWornSlot(type: string): void {
+    if (type === 'Armor') {
+      this.showWornSlot = true;
+    } else {
+      this.showWornSlot = false;
+    }
+  }
+
+  showWorn(event: any): void {
+    if(event.target.value.toLowerCase() === 'armor')
+    {
+      this.showWornSlot = true;
+    }
+    else{
+      this.showWornSlot = false;
+    }
   }
 
 
