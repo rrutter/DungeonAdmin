@@ -1,162 +1,208 @@
 <h1>Create New Equipment</h1>
 
-<form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="name">Name:</label>
-    <input id="name" formControlName="name" required />
+<div class="container">
+  <div class="left">
+    <h1>Create or Edit Equipment</h1>
+
+    <form [formGroup]="equipmentForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="name">Name:</label>
+        <input id="name" formControlName="name" required />
+      </div>
+
+      <div>
+        <label for="type">Type:</label>
+        <select id="type" formControlName="type" required>
+          <option value="Weapon">Weapon</option>
+          <option value="Armor">Armor</option>
+          <option value="Accessory">Accessory</option>
+          <option value="Consumable">Consumable</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="handedness">Handedness:</label>
+        <select id="handedness" formControlName="handedness">
+          <option value="1">One-Handed</option>
+          <option value="2">Two-Handed</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="damageMin">Damage Min:</label>
+        <input type="number" id="damageMin" formControlName="damageMin" />
+      </div>
+
+      <div>
+        <label for="damageMax">Damage Max:</label>
+        <input type="number" id="damageMax" formControlName="damageMax" />
+      </div>
+
+      <div>
+        <label for="defense">Defense:</label>
+        <input type="number" id="defense" formControlName="defense" />
+      </div>
+
+      <h3>Requirements:</h3>
+
+      <div>
+        <label for="strengthRequirement">Strength Requirement:</label>
+        <input type="number" id="strengthRequirement" formControlName="strengthRequirement" />
+      </div>
+
+      <div>
+        <label for="dexterityRequirement">Dexterity Requirement:</label>
+        <input type="number" id="dexterityRequirement" formControlName="dexterityRequirement" />
+      </div>
+
+      <div>
+        <label for="constitutionRequirement">Constitution Requirement:</label>
+        <input type="number" id="constitutionRequirement" formControlName="constitutionRequirement" />
+      </div>
+
+      <div>
+        <label for="intelligenceRequirement">Intelligence Requirement:</label>
+        <input type="number" id="intelligenceRequirement" formControlName="intelligenceRequirement" />
+      </div>
+
+      <div>
+        <label for="wisdomRequirement">Wisdom Requirement:</label>
+        <input type="number" id="wisdomRequirement" formControlName="wisdomRequirement" />
+      </div>
+
+      <div>
+        <label for="charismaRequirement">Charisma Requirement:</label>
+        <input type="number" id="charismaRequirement" formControlName="charismaRequirement" />
+      </div>
+
+      <h3>Bonuses:</h3>
+
+      <div>
+        <label for="strengthBonus">Strength Bonus:</label>
+        <input type="number" id="strengthBonus" formControlName="strengthBonus" />
+      </div>
+
+      <div>
+        <label for="dexterityBonus">Dexterity Bonus:</label>
+        <input type="number" id="dexterityBonus" formControlName="dexterityBonus" />
+      </div>
+
+      <div>
+        <label for="constitutionBonus">Constitution Bonus:</label>
+        <input type="number" id="constitutionBonus" formControlName="constitutionBonus" />
+      </div>
+
+      <div>
+        <label for="intelligenceBonus">Intelligence Bonus:</label>
+        <input type="number" id="intelligenceBonus" formControlName="intelligenceBonus" />
+      </div>
+
+      <div>
+        <label for="wisdomBonus">Wisdom Bonus:</label>
+        <input type="number" id="wisdomBonus" formControlName="wisdomBonus" />
+      </div>
+
+      <div>
+        <label for="charismaBonus">Charisma Bonus:</label>
+        <input type="number" id="charismaBonus" formControlName="charismaBonus" />
+      </div>
+
+      <h3>Additional Info:</h3>
+
+      <div>
+        <label for="hitPoints">Hit Points:</label>
+        <input type="number" id="hitPoints" formControlName="hitPoints" />
+      </div>
+
+      <div>
+        <label for="manaPoints">Mana Points:</label>
+        <input type="number" id="manaPoints" formControlName="manaPoints" />
+      </div>
+
+      <div>
+        <label for="alignment">Alignment:</label>
+        <select id="alignment" formControlName="alignment">
+          <option value="Good">Good</option>
+          <option value="Evil">Evil</option>
+          <option value="Neutral">Neutral</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="value">Value:</label>
+        <input type="number" id="value" formControlName="value" />
+      </div>
+
+      <div>
+        <label for="iconUrl">Icon URL:</label>
+        <input id="iconUrl" formControlName="iconUrl" />
+      </div>
+
+      <div>
+        <label for="special">Special Ability:</label>
+        <input id="special" formControlName="special" />
+      </div>
+
+      <div>
+        <label for="special2">Secondary Special Ability:</label>
+        <input id="special2" formControlName="special2" />
+      </div>
+
+      <div>
+        <label for="isCursed">Is Cursed?</label>
+        <input type="checkbox" id="isCursed" formControlName="isCursed" />
+      </div>
+
+
+      <h3>Guild Level Requirements:</h3>
+      <div formArrayName="guilds" *ngFor="let guildCtrl of guildFormArray.controls; let i = index">
+        <div [formGroupName]="i">
+          <label for="guild-{{i}}">{{guilds[i]?.name || 'Guild'}} Level:</label>
+          <input type="number" formControlName="requiredLevel" />
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="!equipmentForm.valid">Create Equipment</button>
+    </form>
+
+
   </div>
 
-  <div>
-    <label for="type">Type:</label>
-    <select id="type" formControlName="type" required>
-      <option value="Weapon">Weapon</option>
-      <option value="Armor">Armor</option>
-      <option value="Accessory">Accessory</option>
-      <option value="Consumable">Consumable</option>
-    </select>
-  </div>
+  <div class="right">
+    <h1>Equipment List</h1>
 
-  <div>
-    <label for="handedness">Handedness:</label>
-    <select id="handedness" formControlName="handedness">
-      <option value="1">One-Handed</option>
-      <option value="2">Two-Handed</option>
-    </select>
-  </div>
-
-  <div>
-    <label for="damageMin">Damage Min:</label>
-    <input type="number" id="damageMin" formControlName="damageMin" />
-  </div>
-
-  <div>
-    <label for="damageMax">Damage Max:</label>
-    <input type="number" id="damageMax" formControlName="damageMax" />
-  </div>
-
-  <div>
-    <label for="defense">Defense:</label>
-    <input type="number" id="defense" formControlName="defense" />
-  </div>
-
-  <h3>Requirements:</h3>
-
-  <div>
-    <label for="strengthRequirement">Strength Requirement:</label>
-    <input type="number" id="strengthRequirement" formControlName="strengthRequirement" />
-  </div>
-
-  <div>
-    <label for="dexterityRequirement">Dexterity Requirement:</label>
-    <input type="number" id="dexterityRequirement" formControlName="dexterityRequirement" />
-  </div>
-
-  <div>
-    <label for="constitutionRequirement">Constitution Requirement:</label>
-    <input type="number" id="constitutionRequirement" formControlName="constitutionRequirement" />
-  </div>
-
-  <div>
-    <label for="intelligenceRequirement">Intelligence Requirement:</label>
-    <input type="number" id="intelligenceRequirement" formControlName="intelligenceRequirement" />
-  </div>
-
-  <div>
-    <label for="wisdomRequirement">Wisdom Requirement:</label>
-    <input type="number" id="wisdomRequirement" formControlName="wisdomRequirement" />
-  </div>
-
-  <div>
-    <label for="charismaRequirement">Charisma Requirement:</label>
-    <input type="number" id="charismaRequirement" formControlName="charismaRequirement" />
-  </div>
-
-  <h3>Bonuses:</h3>
-
-  <div>
-    <label for="strengthBonus">Strength Bonus:</label>
-    <input type="number" id="strengthBonus" formControlName="strengthBonus" />
-  </div>
-
-  <div>
-    <label for="dexterityBonus">Dexterity Bonus:</label>
-    <input type="number" id="dexterityBonus" formControlName="dexterityBonus" />
-  </div>
-
-  <div>
-    <label for="constitutionBonus">Constitution Bonus:</label>
-    <input type="number" id="constitutionBonus" formControlName="constitutionBonus" />
-  </div>
-
-  <div>
-    <label for="intelligenceBonus">Intelligence Bonus:</label>
-    <input type="number" id="intelligenceBonus" formControlName="intelligenceBonus" />
-  </div>
-
-  <div>
-    <label for="wisdomBonus">Wisdom Bonus:</label>
-    <input type="number" id="wisdomBonus" formControlName="wisdomBonus" />
-  </div>
-
-  <div>
-    <label for="charismaBonus">Charisma Bonus:</label>
-    <input type="number" id="charismaBonus" formControlName="charismaBonus" />
-  </div>
-
-  <h3>Additional Info:</h3>
-
-  <div>
-    <label for="hitPoints">Hit Points:</label>
-    <input type="number" id="hitPoints" formControlName="hitPoints" />
-  </div>
-
-  <div>
-    <label for="manaPoints">Mana Points:</label>
-    <input type="number" id="manaPoints" formControlName="manaPoints" />
-  </div>
-
-  <div>
-    <label for="alignment">Alignment:</label>
-    <select id="alignment" formControlName="alignment">
-      <option value="Good">Good</option>
-      <option value="Evil">Evil</option>
-      <option value="Neutral">Neutral</option>
-    </select>
-  </div>
-
-  <div>
-    <label for="value">Value:</label>
-    <input type="number" id="value" formControlName="value" />
-  </div>
-
-  <div>
-    <label for="iconUrl">Icon URL:</label>
-    <input id="iconUrl" formControlName="iconUrl" />
-  </div>
-
-  <div>
-    <label for="special">Special Ability:</label>
-    <input id="special" formControlName="special" />
-  </div>
-
-  <div>
-    <label for="special2">Secondary Special Ability:</label>
-    <input id="special2" formControlName="special2" />
-  </div>
-
-  <div>
-    <label for="isCursed">Is Cursed?</label>
-    <input type="checkbox" id="isCursed" formControlName="isCursed" />
-  </div>
-
-
-  <h3>Guild Level Requirements:</h3>
-  <div formArrayName="guilds" *ngFor="let guildCtrl of guildFormArray.controls; let i = index">
-    <div [formGroupName]="i">
-      <label for="guild-{{i}}">{{guilds[i]?.name || 'Guild'}} Level:</label>
-      <input type="number" formControlName="requiredLevel" />
+    <div>
+      <label for="filter">Filter by Type:</label>
+      <select id="filter" [(ngModel)]="filterType" (change)="filterEquipment()">
+        <option value="">All</option>
+        <option value="Weapon">Weapon</option>
+        <option value="Armor">Armor</option>
+        <option value="Accessory">Accessory</option>
+        <option value="Consumable">Consumable</option>
+      </select>
     </div>
-  </div>
 
-  <button type="submit" [disabled]="!equipmentForm.valid">Create Equipment</button>
-</form>
+    <ul>
+      <li *ngFor="let equipment of filteredEquipment">
+        <span (click)="selectEquipment(equipment)">{{ equipment.name }} ({{ equipment.type }})</span>
+        <button (click)="deleteEquipment(equipment.id)">Delete</button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .container {
+    display: flex;
+  }
+
+  .left {
+    width: 50%;
+    padding: 10px;
+  }
+
+  .right {
+    width: 50%;
+    padding: 10px;
+  }
+</style>

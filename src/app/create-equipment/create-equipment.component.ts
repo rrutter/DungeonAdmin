@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 export class CreateEquipmentComponent implements OnInit {
   equipmentForm: FormGroup;
   guilds: any[] = [];
+  allEquipment: any[] = []; // Holds all equipment data from the backend
+  filteredEquipment: any[] = []; // Holds filtered equipment based on type
+  filterType: string = ''; // For filtering equipment by type
 
   constructor(
     private fb: FormBuilder,
@@ -46,15 +49,16 @@ export class CreateEquipmentComponent implements OnInit {
       special: [''],
       special2: [''],
       iconUrl: [''],
-      guilds: this.fb.array([]) // Form array to hold the guild level requirements
+      guilds: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
     this.loadGuilds();
+    this.loadEquipment();
   }
 
-  // Fetch all guilds and dynamically add form controls for guild requirements
+  // Load the list of guilds
   loadGuilds(): void {
     this.guildService.getAllGuilds().subscribe(
       (guilds) => {
@@ -67,18 +71,88 @@ export class CreateEquipmentComponent implements OnInit {
     );
   }
 
+  // Load the list of all equipment
+  loadEquipment(): void {
+    this.equipmentService.getAllEquipment().subscribe(
+      (equipment) => {
+        this.allEquipment = equipment;
+        this.filteredEquipment = equipment; // Initialize with all equipment
+      },
+      (error) => {
+        console.error('Error fetching equipment', error);
+      }
+    );
+  }
+
   // Dynamically add form controls for each guild's required level
   addGuildControls(guilds: any[]): void {
     const guildArray = this.equipmentForm.get('guilds') as FormArray;
     guilds.forEach((guild) => {
       guildArray.push(
         this.fb.group({
-          guildId: [guild.id],  // The guild ID
-          requiredLevel: [0, [Validators.min(0)]]  // The required level for the guild
+          guildId: [guild.id],
+          requiredLevel: [0, [Validators.min(0)]]
         })
       );
     });
   }
+
+  // Filter the equipment list based on the selected type
+  filterEquipment(): void {
+    if (this.filterType) {
+      this.filteredEquipment = this.allEquipment.filter(
+        (equipment) => equipment.type === this.filterType
+      );
+    } else {
+      this.filteredEquipment = this.allEquipment;
+    }
+  }
+
+  // Populate the form with the selected equipment
+// Populate the form with the selected equipment
+  selectEquipment(equipment: any): void {
+    this.equipmentForm.patchValue({
+      name: equipment.name,
+      type: equipment.type,
+      handedness: equipment.handedness,
+      damageMin: equipment.damageMin,
+      damageMax: equipment.damageMax,
+      defense: equipment.defense,
+      strengthRequirement: equipment.strengthRequirement,
+      dexterityRequirement: equipment.dexterityRequirement,
+      constitutionRequirement: equipment.constitutionRequirement,
+      intelligenceRequirement: equipment.intelligenceRequirement,
+      wisdomRequirement: equipment.wisdomRequirement,
+      charismaRequirement: equipment.charismaRequirement,
+      hitPoints: equipment.hitPoints,
+      manaPoints: equipment.manaPoints,
+      strengthBonus: equipment.strengthBonus,
+      dexterityBonus: equipment.dexterityBonus,
+      constitutionBonus: equipment.constitutionBonus,
+      intelligenceBonus: equipment.intelligenceBonus,
+      wisdomBonus: equipment.wisdomBonus,
+      charismaBonus: equipment.charismaBonus,
+      alignment: equipment.alignment,
+      value: equipment.value,
+      isCursed: equipment.isCursed,
+      special: equipment.special,
+      special2: equipment.special2,
+      iconUrl: equipment.iconUrl
+    });
+
+    // Check if the equipment has guilds before trying to map guild levels
+    if (equipment.guilds && Array.isArray(equipment.guilds)) {
+      const guildFormArray = this.equipmentForm.get('guilds') as FormArray;
+      equipment.guilds.forEach((guildRequirement: any, index: number) => {
+        if (guildFormArray.at(index)) {
+          guildFormArray.at(index).patchValue({
+            requiredLevel: guildRequirement.requiredLevel
+          });
+        }
+      });
+    }
+  }
+
 
   onSubmit(): void {
     if (this.equipmentForm.valid) {
@@ -87,10 +161,25 @@ export class CreateEquipmentComponent implements OnInit {
       this.equipmentService.createEquipment(mappedData).subscribe(
         (response) => {
           console.log('Equipment created successfully', response);
-          this.router.navigate(['/menu']);  // Redirect back to the menu
+          this.router.navigate(['/menu']);
         },
         (error) => {
           console.error('Error creating equipment', error);
+        }
+      );
+    }
+  }
+
+  // Method to delete equipment
+  deleteEquipment(equipmentId: number): void {
+    if (confirm('Are you sure you want to delete this equipment?')) {
+      this.equipmentService.deleteEquipment(equipmentId).subscribe(
+        (response) => {
+          console.log('Equipment deleted successfully');
+          this.loadEquipment();  // Reload the equipment list after deletion
+        },
+        (error) => {
+          console.error('Error deleting equipment', error);
         }
       );
     }
@@ -104,7 +193,6 @@ export class CreateEquipmentComponent implements OnInit {
       guildLevelMapping[`guild${index + 1}RequiredLevel`] = guild.requiredLevel || 0;
     });
 
-    // Merge guild level mapping into the form data
     return { ...formData, ...guildLevelMapping };
   }
 

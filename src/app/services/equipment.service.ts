@@ -11,7 +11,15 @@ export class EquipmentService {
 
   constructor(private http: HttpClient) { }
 
+  getAllEquipment(): Observable<any> {
+    return this.http.get(`${this.apiUrl}`);
+  }
+
   createEquipment(equipmentData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/create`, equipmentData);
+  }
+
+  deleteEquipment(equipmentId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${equipmentId}`);
   }
 }
