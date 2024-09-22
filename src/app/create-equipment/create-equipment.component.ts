@@ -108,8 +108,6 @@ export class CreateEquipmentComponent implements OnInit {
     }
   }
 
-  // Populate the form with the selected equipment
-// Populate the form with the selected equipment
   selectEquipment(equipment: any): void {
     this.equipmentForm.patchValue({
       name: equipment.name,
@@ -137,21 +135,24 @@ export class CreateEquipmentComponent implements OnInit {
       isCursed: equipment.isCursed,
       special: equipment.special,
       special2: equipment.special2,
-      iconUrl: equipment.iconUrl
+      iconUrl: equipment.iconUrl,
     });
 
-    // Check if the equipment has guilds before trying to map guild levels
-    if (equipment.guilds && Array.isArray(equipment.guilds)) {
-      const guildFormArray = this.equipmentForm.get('guilds') as FormArray;
-      equipment.guilds.forEach((guildRequirement: any, index: number) => {
-        if (guildFormArray.at(index)) {
-          guildFormArray.at(index).patchValue({
-            requiredLevel: guildRequirement.requiredLevel
-          });
-        }
-      });
-    }
+    // Clear the existing form array for guilds
+    const guildArray = this.equipmentForm.get('guilds') as FormArray;
+    guildArray.clear();
+
+    // Populate guild requirements
+    this.guilds.forEach((guild, index) => {
+      guildArray.push(
+        this.fb.group({
+          guildId: [guild.id],
+          requiredLevel: [equipment[`guild${index + 1}RequiredLevel`] || 0, [Validators.min(0)]]
+        })
+      );
+    });
   }
+
 
 
   onSubmit(): void {
